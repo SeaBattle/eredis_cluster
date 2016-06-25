@@ -22,11 +22,15 @@ create(Host, Port) ->
             WorkerArgs = [{host, Host}, {port, Port}],
 
         	Size = application:get_env(eredis_cluster, pool_size, 10),
-        	MaxOverflow = application:get_env(eredis_cluster, pool_max_overflow, 0),
+        	MaxOverflow = application:get_env(eredis_cluster, pool_max_overflow, 1000),
+        	OverflowTTL = application:get_env(eredis_cluster, overflow_ttl, 5000),
+        	CheckPeriod = application:get_env(eredis_cluster, overflow_check_period, 1000),
 
             PoolArgs = [{name, {local, PoolName}},
                         {worker_module, eredis_cluster_pool_worker},
                         {size, Size},
+                        {overflow_ttl, OverflowTTL},
+                        {overflow_check_period, CheckPeriod},
                         {max_overflow, MaxOverflow}],
 
             ChildSpec = poolboy:child_spec(PoolName, PoolArgs, WorkerArgs),

@@ -11,3 +11,5 @@ rel/example_project
 rebar.lock
 _build/
 priv/
+/eredis_cluster.iml
+/.idea/
